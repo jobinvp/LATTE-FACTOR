@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latte Factor Calculator | Smart Wealth Builder</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              850: '#0f1f3d',
+              900: '#0a162b',
+              950: '#060e1c',
+            },
+            emerald: {
+              450: '#10b981',
+            },
+            gold: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom range slider styling for clean mobile touch interaction */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 8px;
+      border-radius: 9999px;
+      background: #1e293b;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      margin-top: -6px;
+      background-color: #f59e0b;
+      border: 3px solid #ffffff;
+      height: 20px;
+      width: 20px;
+      border-radius: 9999px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+      transition: transform 0.15s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover,
+    input[type="range"]::-webkit-slider-thumb:active {
+      transform: scale(1.15);
+    }
+    /* Hide number input spinners */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col items-center py-4 px-3 sm:py-8">
+
+  <!-- Main Mobile-First Card Container -->
+  <main class="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200/80">
+    
+    <!-- Header Banner -->
+    <header class="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-850 text-white px-6 pt-7 pb-6 relative overflow-hidden">
+      <!-- Subtle decorative background glow -->
+      <div class="absolute -top-12 -right-12 w-36 h-36 bg-emerald-500/15 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-gold-500/15 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="flex items-center justify-between mb-2">
+        <span class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-gold-400 bg-gold-500/10 border border-gold-400/20 px-2.5 py-1 rounded-full">
+          <span>☕</span> Cash Flow & Wealth Tool
+        </span>
+        <span class="text-xs text-slate-400 font-medium">TFSA / Growth Ready</span>
+      </div>
+      <h1 class="text-2xl font-extrabold tracking-tight text-white mt-1">
+        The Latte Factor Calculator
+      </h1>
+      <p class="text-sm text-slate-300 mt-1 leading-relaxed">
+        See how redirecting one small everyday habit can build serious tax-free wealth over time.
+      </p>
+    </header>
+
+    <!-- Calculator Body -->
+    <div class="p-5 sm:p-6 space-y-6">
+
+      <!-- 1. Quick Preset Pills -->
+      <section aria-label="Quick Expense Presets">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">
+          1. Tap a Quick Habit Preset
+        </label>
+        <div class="grid grid-cols-2 gap-2" id="presetContainer">
+          <button type="button" data-preset="coffee"
+            class="preset-btn active-preset flex items-center justify-between px-3 py-2.5 rounded-xl border text-left text-xs font-semibold transition-all bg-navy-900 text-white border-navy-900 shadow-sm">
+            <span>☕ Daily Coffee</span>
+            <span class="text-gold-400 font-bold">$6.50</span>
+          </button>
+          <button type="button" data-preset="lunch"
+            class="preset-btn flex items-center justify-between px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-left text-xs font-semibold transition-all">
+            <span>🥗 Work Lunch</span>
+            <span class="text-emerald-700 font-bold">$18.00</span>
+          </button>
+          <button type="button" data-preset="subs"
+            class="preset-btn flex items-center justify-between px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-left text-xs font-semibold transition-all">
+            <span>📱 Subscriptions</span>
+            <span class="text-emerald-700 font-bold">$15/mo</span>
+          </button>
+          <button type="button" data-preset="snacks"
+            class="preset-btn flex items-center justify-between px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-left text-xs font-semibold transition-all">
+            <span>🍩 Impulse Snacks</span>
+            <span class="text-emerald-700 font-bold">$5.00</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. Custom Inputs -->
+      <section class="space-y-3.5 bg-slate-50 p-4 rounded-2xl border border-slate-200/70">
+        <div>
+          <label for="itemName" class="block text-xs font-semibold text-slate-600 mb-1">
+            Habit / Expense Name
+          </label>
+          <input type="text" id="itemName" value="Daily Coffee" placeholder="e.g., Afternoon Latte"
+            class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <!-- Expense Amount -->
+          <div>
+            <label for="expenseAmount" class="block text-xs font-semibold text-slate-600 mb-1">
+              Amount ($)
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-3 flex items-center text-slate-400 font-bold text-sm">$</span>
+              <input type="number" id="expenseAmount" value="6.50" min="0.50" max="10000" step="0.50" inputmode="decimal"
+                class="w-full pl-7 pr-3 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+            </div>
+          </div>
+
+          <!-- Frequency Selector -->
+          <div>
+            <label for="frequency" class="block text-xs font-semibold text-slate-600 mb-1">
+              How Often?
+            </label>
+            <select id="frequency"
+              class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition">
+              <option value="365" selected>Daily (365x/yr)</option>
+              <option value="260">Workdays (5x/wk)</option>
+              <option value="52">Weekly (52x/yr)</option>
+              <option value="12">Monthly (12x/yr)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Expected Annual Return Slider -->
+      <section class="bg-navy-950 text-white p-4 rounded-2xl shadow-inner">
+        <div class="flex items-center justify-between mb-2">
+          <label for="returnRate" class="text-xs font-semibold text-slate-300">
+            Expected Annual Return
+          </label>
+          <span id="returnRateBadge" class="text-sm font-extrabold text-gold-400 bg-gold-500/15 border border-gold-400/30 px-2.5 py-0.5 rounded-lg">
+            7.0% / yr
+          </span>
+        </div>
+        <input type="range" id="returnRate" min="0" max="10" step="0.5" value="7" class="w-full my-1" />
+        <div class="flex justify-between text-[11px] text-slate-400 font-medium mt-1">
+          <span>0% (Cash)</span>
+          <span>5% (Balanced)</span>
+          <span>7% (Index)</span>
+          <span>10% (Growth)</span>
+        </div>
+      </section>
+
+      <!-- 4. Headline Impact Card -->
+      <section class="bg-gradient-to-br from-emerald-600 to-emerald-800 text-white p-5 rounded-2xl shadow-md relative overflow-hidden">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-emerald-100">
+              20-Year Potential Wealth
+            </p>
+            <p id="heroTotal20" class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mt-1">
+              $97,298
+            </p>
+          </div>
+          <div class="bg-white/15 backdrop-blur-sm px-2.5 py-1.5 rounded-xl text-right">
+            <p class="text-[10px] uppercase tracking-wider text-emerald-100 font-semibold">Annual Cost</p>
+            <p id="annualSpendDisplay" class="text-sm font-bold text-gold-300">$2,372.50</p>
+          </div>
+        </div>
+
+        <!-- Visual Comparison Bar (Cash Principal vs Compound Growth) -->
+        <div class="mt-4 pt-3.5 border-t border-emerald-500/40">
+          <div class="flex justify-between text-xs font-medium mb-1.5">
+            <span class="text-emerald-100">Cash Saved: <strong id="heroCash20" class="text-white">$47,450</strong></span>
+            <span class="text-gold-300">Growth: <strong id="heroGrowth20">+$49,848</strong></span>
+          </div>
+          <div class="w-full h-3.5 bg-navy-950/40 rounded-full overflow-hidden flex p-0.5">
+            <div id="cashBar" class="h-full bg-white rounded-l-full transition-all duration-300" style="width: 49%"></div>
+            <div id="growthBar" class="h-full bg-gold-400 rounded-r-full transition-all duration-300" style="width: 51%"></div>
+          </div>
+          <div class="flex items-center gap-4 mt-2 text-[11px] text-emerald-100">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-white inline-block"></span> Your Money</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-gold-400 inline-block"></span> Compound Interest</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Horizon Breakdown Grid (1Y, 5Y, 10Y, 20Y) -->
+      <section>
+        <div class="flex items-center justify-between mb-2.5">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">
+            Wealth Milestone Breakdown
+          </h2>
+          <span class="text-[11px] text-slate-400 font-medium">Cash vs. Invested</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5" id="milestoneGrid">
+          <!-- 1 Year -->
+          <div class="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-navy-900">1 Year</span>
+              <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">Start</span>
+            </div>
+            <p id="invested1" class="text-lg font-extrabold text-emerald-700">$2,456</p>
+            <p class="text-[11px] text-slate-500 mt-0.5">Cash: <span id="cash1" class="font-semibold text-slate-700">$2,373</span></p>
+          </div>
+
+          <!-- 5 Years -->
+          <div class="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-navy-900">5 Years</span>
+              <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">Momentum</span>
+            </div>
+            <p id="invested5" class="text-lg font-extrabold text-emerald-700">$14,148</p>
+            <p class="text-[11px] text-slate-500 mt-0.5">Cash: <span id="cash5" class="font-semibold text-slate-700">$11,863</span></p>
+          </div>
+
+          <!-- 10 Years -->
+          <div class="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-navy-900">10 Years</span>
+              <span class="text-[10px] font-semibold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded">Compounding</span>
+            </div>
+            <p id="invested10" class="text-lg font-extrabold text-emerald-700">$34,193</p>
+            <p class="text-[11px] text-slate-500 mt-0.5">Cash: <span id="cash10" class="font-semibold text-slate-700">$23,725</span></p>
+          </div>
+
+          <!-- 20 Years -->
+          <div class="p-3.5 rounded-2xl border-2 border-gold-400/70 bg-amber-50/40">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-navy-900">20 Years</span>
+              <span class="text-[10px] font-bold text-navy-900 bg-gold-400 px-1.5 py-0.5 rounded">Freedom</span>
+            </div>
+            <p id="invested20" class="text-lg font-extrabold text-navy-900">$97,298</p>
+            <p class="text-[11px] text-slate-600 mt-0.5">Cash: <span id="cash20" class="font-semibold text-slate-800">$47,450</span></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. WhatsApp Channel Share Actions -->
+      <section class="pt-1 space-y-2.5">
+        <button type="button" id="copyWhatsAppBtn"
+          class="w-full py-3.5 px-4 bg-navy-900 hover:bg-navy-850 active:scale-[0.99] text-white font-bold text-sm rounded-2xl shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer">
+          <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>Copy Summary for WhatsApp</span>
+        </button>
+
+        <a id="directWhatsAppLink" href="#" target="_blank" rel="noopener noreferrer"
+          class="w-full py-3.5 px-4 bg-[#25D366] hover:bg-[#20bd5a] active:scale-[0.99] text-navy-950 font-extrabold text-sm rounded-2xl shadow-md flex items-center justify-center gap-2 transition-all">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.546 20.2c-.151.512.323.986.835.835l3.032-.892A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
+          </svg>
+          <span>Share Directly to WhatsApp</span>
+        </a>
+      </section>
+
+      <!-- Hidden textarea fallback for reliable iFrame/mobile clipboard copy -->
+      <textarea id="clipboardFallback" class="sr-only" aria-hidden="true"></textarea>
+    </div>
+
+    <!-- Subtle Disclaimer Footer -->
+    <footer class="bg-slate-50 border-t border-slate-200/80 px-6 py-3.5 text-center">
+      <p class="text-[11px] text-slate-400 leading-normal">
+        For educational & illustration purposes. Assumes monthly compounding inside a tax-sheltered account (e.g., TFSA).
+      </p>
+    </footer>
+  </main>
+
+  <!-- Toast Notification Banner (Replaces alert()) -->
+  <div id="toastMessage"
+    class="fixed bottom-5 left-1/2 -translate-x-1/2 translate-y-20 opacity-0 pointer-events-none bg-navy-950 text-white px-5 py-3 rounded-2xl shadow-2xl border border-gold-400/40 flex items-center gap-2.5 text-sm font-semibold transition-all duration-300 z-50">
+    <span class="text-emerald-400 text-base">✔</span>
+    <span id="toastText">Copied to clipboard! Ready to paste in WhatsApp.</span>
+  </div>
+
+  <script>
+    // Preset configurations
+    const PRESETS = {
+      coffee: { name: 'Daily Coffee', amount: 6.50, freq: '365' },
+      lunch:  { name: 'Takeout Lunch', amount: 18.00, freq: '260' },
+      subs:   { name: 'Unused Subscriptions', amount: 15.00, freq: '12' },
+      snacks: { name: 'Impulse Snacks', amount: 5.00, freq: '365' }
+    };
+
+    const FREQUENCY_LABELS = {
+      '365': 'Daily',
+      '260': 'Workdays (5x/wk)',
+      '52':  'Weekly',
+      '12':  'Monthly'
+    };
+
+    // DOM Elements
+    const itemNameInput = document.getElementById('itemName');
+    const expenseAmountInput = document.getElementById('expenseAmount');
+    const frequencySelect = document.getElementById('frequency');
+    const returnRateInput = document.getElementById('returnRate');
+    const returnRateBadge = document.getElementById('returnRateBadge');
+    const presetButtons = document.querySelectorAll('.preset-btn');
+    const copyWhatsAppBtn = document.getElementById('copyWhatsAppBtn');
+    const directWhatsAppLink = document.getElementById('directWhatsAppLink');
+    const clipboardFallback = document.getElementById('clipboardFallback');
+    const toastMessage = document.getElementById('toastMessage');
+    const toastText = document.getElementById('toastText');
+
+    // Currency formatter
+    function formatCurrency(val, decimals = 0) {
+      return new Intl.NumberFormat('en-CA', {
+        style: 'currency',
+        currency: 'CAD',
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      }).format(val);
+    }
+
+    // Compound growth calculator using monthly contributions & monthly compounding
+    function calculateFutureValue(annualContribution, annualRatePercent, years) {
+      if (annualContribution <= 0) return 0;
+      if (annualRatePercent === 0) {
+        return annualContribution * years;
+      }
+      const monthlyContribution = annualContribution / 12;
+      const monthlyRate = (annualRatePercent / 100) / 12;
+      const totalMonths = years * 12;
+      // Future value of an annuity due / ordinary annuity blend (end of month)
+      return monthlyContribution * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
+    }
+
+    // Build crisp emoji-enhanced summary text for WhatsApp
+    function buildWhatsAppMessage(data) {
+      const { itemName, amount, freqLabel, annualSpend, rate, results } = data;
+      return [
+        `☕ *The Latte Factor Check-In* 💡`,
+        ``,
+        `Small daily habits quietly shape our financial future! Look what happens if we redirect *${itemName}* (*${formatCurrency(amount, 2)}* • ${freqLabel}):`,
+        ``,
+        `💸 *Annual Cost:* ${formatCurrency(annualSpend, 2)}/yr`,
+        `📈 *If Invested at ${rate.toFixed(1)}%/yr (e.g. inside a TFSA):*`,
+        `• *1 Year:* ${formatCurrency(results[1].invested)} _(Cash: ${formatCurrency(results[1].cash)})_`,
+        `• *5 Years:* ${formatCurrency(results[5].invested)} _(Cash: ${formatCurrency(results[5].cash)})_`,
+        `• *10 Years:* ${formatCurrency(results[10].invested)} _(Cash: ${formatCurrency(results[10].cash)})_`,
+        `• *20 Years:* *${formatCurrency(results[20].invested)}* _(Cash: ${formatCurrency(results[20].cash)})_`,
+        ``,
+        `✨ *Takeaway:* You don’t have to give up everything you enjoy—just pick *one* small habit to redirect and let compounding do the heavy lifting!`,
+        ``,
+        `What small daily expense would you redirect first? 👇`
+      ].join('\n');
+    }
+
+    // Update all UI elements and share links
+    function updateCalculator() {
+      const itemName = itemNameInput.value.trim() || 'Daily Habit';
+      const rawAmount = parseFloat(expenseAmountInput.value);
+      const amount = isNaN(rawAmount) || rawAmount < 0 ? 0 : rawAmount;
+      const freqKey = frequencySelect.value;
+      const freqPerYear = parseInt(freqKey, 10);
+      const rate = parseFloat(returnRateInput.value);
+
+      // Update rate badge
+      returnRateBadge.textContent = `${rate.toFixed(1)}% / yr`;
+
+      // Calculate annual spend
+      const annualSpend = amount * freqPerYear;
+      document.getElementById('annualSpendDisplay').textContent = formatCurrency(annualSpend, 2);
+
+      // Calculate milestones
+      const horizons = [1, 5, 10, 20];
+      const results = {};
+
+      horizons.forEach((yr) => {
+        const cash = annualSpend * yr;
+        const invested = calculateFutureValue(annualSpend, rate, yr);
+        results[yr] = { cash, invested };
+
+        document.getElementById(`cash${yr}`).textContent = formatCurrency(cash);
+        document.getElementById(`invested${yr}`).textContent = formatCurrency(invested);
+      });
+
+      // Update 20-year hero card & visual bar
+      const total20 = results[20].invested;
+      const cash20 = results[20].cash;
+      const growth20 = Math.max(0, total20 - cash20);
+
+      document.getElementById('heroTotal20').textContent = formatCurrency(total20);
+      document.getElementById('heroCash20').textContent = formatCurrency(cash20);
+      document.getElementById('heroGrowth20').textContent = `+${formatCurrency(growth20)}`;
+
+      if (total20 > 0) {
+        const cashPct = Math.max(8, Math.min(100, (cash20 / total20) * 100));
+        const growthPct = 100 - cashPct;
+        document.getElementById('cashBar').style.width = `${cashPct.toFixed(1)}%`;
+        document.getElementById('growthBar').style.width = `${growthPct.toFixed(1)}%`;
+      } else {
+        document.getElementById('cashBar').style.width = '100%';
+        document.getElementById('growthBar').style.width = '0%';
+      }
+
+      // Update WhatsApp message & direct share URL
+      const shareText = buildWhatsAppMessage({
+        itemName,
+        amount,
+        freqLabel: FREQUENCY_LABELS[freqKey],
+        annualSpend,
+        rate,
+        results
+      });
+
+      clipboardFallback.value = shareText;
+      directWhatsAppLink.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+    }
+
+    // Handle preset pill selection
+    function selectPreset(presetKey) {
+      const preset = PRESETS[presetKey];
+      if (!preset) return;
+
+      itemNameInput.value = preset.name;
+      expenseAmountInput.value = preset.amount.toFixed(2);
+      frequencySelect.value = preset.freq;
+
+      presetButtons.forEach((btn) => {
+        const isMatch = btn.dataset.preset === presetKey;
+        if (isMatch) {
+          btn.className = 'preset-btn active-preset flex items-center justify-between px-3 py-2.5 rounded-xl border text-left text-xs font-semibold transition-all bg-navy-900 text-white border-navy-900 shadow-sm';
+          btn.querySelector('span:last-child').className = 'text-gold-400 font-bold';
+        } else {
+          btn.className = 'preset-btn flex items-center justify-between px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-left text-xs font-semibold transition-all';
+          btn.querySelector('span:last-child').className = 'text-emerald-700 font-bold';
+        }
+      });
+
+      updateCalculator();
+    }
+
+    // Clear active preset highlight when user customizes fields manually
+    function clearPresetHighlight() {
+      presetButtons.forEach((btn) => {
+        btn.className = 'preset-btn flex items-center justify-between px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-left text-xs font-semibold transition-all';
+        btn.querySelector('span:last-child').className = 'text-emerald-700 font-bold';
+      });
+    }
+
+    // Show non-blocking toast notification
+    let toastTimer;
+    function showToast(msg) {
+      toastText.textContent = msg;
+      toastMessage.classList.remove('translate-y-20', 'opacity-0');
+      toastMessage.classList.add('translate-y-0', 'opacity-100');
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastMessage.classList.add('translate-y-20', 'opacity-0');
+        toastMessage.classList.remove('translate-y-0', 'opacity-100');
+      }, 2800);
+    }
+
+    // Copy to clipboard using execCommand fallback for reliable iFrame support
+    function copySummaryToClipboard() {
+      try {
+        clipboardFallback.classList.remove('sr-only');
+        clipboardFallback.select();
+        clipboardFallback.setSelectionRange(0, 99999);
+        const successful = document.execCommand('copy');
+        clipboardFallback.classList.add('sr-only');
+        window.getSelection()?.removeAllRanges();
+
+        if (successful) {
+          showToast('Summary copied! Ready to paste in WhatsApp.');
+        } else {
+          showToast('Press Ctrl+C / Copy to share your summary.');
+        }
+      } catch (err) {
+        clipboardFallback.classList.add('sr-only');
+        showToast('Use the green button below to share directly!');
+      }
+    }
+
+    // Event Listeners
+    presetButtons.forEach((btn) => {
+      btn.addEventListener('click', () => selectPreset(btn.dataset.preset));
+    });
+
+    itemNameInput.addEventListener('input', () => {
+      clearPresetHighlight();
+      updateCalculator();
+    });
+
+    expenseAmountInput.addEventListener('input', () => {
+      clearPresetHighlight();
+      updateCalculator();
+    });
+
+    frequencySelect.addEventListener('change', () => {
+      clearPresetHighlight();
+      updateCalculator();
+    });
+
+    returnRateInput.addEventListener('input', updateCalculator);
+    copyWhatsAppBtn.addEventListener('click', copySummaryToClipboard);
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', updateCalculator);
+  </script>
+</body>
+</html>
